@@ -187,14 +187,14 @@ spec:
       serviceAccountName: alidns-webhook
       containers:
         - name: alidns-webhook
-          image: pragkent/alidns-webhook:0.1.1
+          image: registry.cn-hangzhou.aliyuncs.com/dictechx/alidns-webhook:0.1.1
           imagePullPolicy: IfNotPresent
           args:
             - --tls-cert-file=/tls/tls.crt
             - --tls-private-key-file=/tls/tls.key
           env:
             - name: GROUP_NAME
-              value: "acme.yourcompany.com"
+              value: "acme.dictech.com.cn"
           ports:
             - name: https
               containerPort: 443
@@ -215,7 +215,8 @@ spec:
               readOnly: true
           resources:
             {}
-
+      imagePullSecrets:
+        - name: acr-credential-secret-aggregation
       volumes:
         - name: certs
           secret:
@@ -225,13 +226,13 @@ spec:
 apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
-  name: v1alpha1.acme.yourcompany.com
+  name: v1alpha1.acme.dictech.com.cn
   labels:
     app: alidns-webhook
   annotations:
     cert-manager.io/inject-ca-from: "cert-manager/alidns-webhook-webhook-tls"
 spec:
-  group: acme.yourcompany.com
+  group: acme.dictech.com.cn
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
